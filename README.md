@@ -1,8 +1,37 @@
-# ML (Project)
+# Insurance Charges Prediction
 
-Short description
+A machine learning project that predicts medical insurance charges using Random Forest regression.
 
-This repository contains a small machine learning project with data and a notebook stored in `Part l/main.ipynb`.
+This project performs end-to-end exploratory data analysis (EDA), data cleaning, feature engineering, and model training on medical insurance data to predict charges based on customer demographics and health factors.
+
+## Project Overview
+
+The notebook (`Part l/main.ipynb`) includes:
+
+1. **Exploratory Data Analysis (EDA)**
+
+   - Statistical summaries and data shape analysis
+   - Missing values and duplicate detection
+   - Distribution analysis (histograms, boxplots, countplots)
+   - Correlation heatmap
+
+2. **Data Cleaning & Processing**
+
+   - Handling missing/duplicate values
+   - Encoding categorical variables (`sex`, `smoker`) to numerical
+   - One-Hot Encoding for `region` feature
+
+3. **Feature Engineering**
+
+   - BMI categorization (UnderWeight, NormalWeight, Overweight, Obesity)
+   - Feature scaling using StandardScaler
+   - Feature selection using Pearson correlation and Chi-square tests
+
+4. **Model Training & Evaluation**
+   - Train/test split (80/20)
+   - Random Forest Regressor with 200 estimators
+   - Metrics: R² Score, MAE, RMSE
+   - Feature importance visualization
 
 ## Repository structure
 
@@ -10,7 +39,7 @@ This repository contains a small machine learning project with data and a notebo
 - `Data/` — dataset folder
   - `Data.csv` — CSV dataset used by the notebook
 - `Part l/` — contains Jupyter notebook(s)
-  - `main.ipynb` — main notebook to run analyses and experiments
+  - `main.ipynb` — full ML pipeline: EDA → Data Cleaning → Feature Engineering → Model Training
 - `.venv/` — (optional) virtual environment directory (gitignored)
 
 ## Quick setup (Windows PowerShell)
@@ -47,7 +76,17 @@ Or open Jupyter and navigate to the `Part l` folder in the browser.
 
 ## How to use the data
 
-In the notebook the dataset is expected at `Data/Data.csv`. Example to load it in Python:
+The dataset (`Data/Data.csv`) contains medical insurance information with the following features:
+
+- `age` — age of the customer
+- `sex` — gender (male/female)
+- `bmi` — body mass index
+- `children` — number of children
+- `smoker` — smoking status (yes/no)
+- `region` — geographic region (northwest, northeast, southeast, southwest)
+- `charges` — annual medical charges (target variable)
+
+In the notebook, the dataset is loaded at the beginning:
 
 ```python
 import pandas as pd
@@ -64,7 +103,16 @@ If your working directory is different, provide the full path or adjust the rela
 
 ## Dependencies
 
-Primary dependencies are listed in `requirements.txt` (examples include pandas, scikit-learn, matplotlib, seaborn, numpy). Install them using the command above.
+Key dependencies are:
+
+- **pandas** — data manipulation
+- **numpy** — numerical computing
+- **scikit-learn** — machine learning (RandomForest, preprocessing, model evaluation)
+- **matplotlib** & **seaborn** — data visualization
+- **scipy** — statistical tests (Pearson correlation, Chi-square)
+- **jupyter** — interactive notebook environment
+
+See `requirements.txt` for the complete list. Install all with:
 
 ## License & contact
 
