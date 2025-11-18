@@ -117,3 +117,11 @@ See `requirements.txt` for the complete list. Install all with:
 ## License & contact
 
 This repository does not specify a license. Add a `LICENSE` file if you want to open-source this project.
+
+Last updated: 2025-11-18
+
+Projects in this repository
+
+- `Part l/` — Insurance charges prediction notebook and pipeline
+- `Hosue-Prediction/` — California housing price prediction scripts and artifacts
+- `nutrition/` — Nutrition analysis notebooks and datasets
