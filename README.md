@@ -124,4 +124,5 @@ Projects in this repository
 
 - `Part l/` — Insurance charges prediction notebook and pipeline
 - `Hosue-Prediction/` — California housing price prediction scripts and artifacts
+- `Ford Car Price/` — Ford used-car price prediction notebook and trained model (`main.ipynb`, `ford_rf_model.pkl`)
 - `nutrition/` — Nutrition analysis notebooks and datasets
