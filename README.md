@@ -123,6 +123,6 @@ Last updated: 2025-11-18
 Projects in this repository
 
 - `Part l/` — Insurance charges prediction notebook and pipeline
-- `Hosue-Prediction/` — California housing price prediction scripts and artifacts
+- `Cal-House/` — California housing price prediction notebook and trained XGBoost model (`main.ipynb`, `xgb_best.joblib`). Open `Cal-House/main.ipynb` to explore EDA, preprocessing, model training, and how to use the saved model.
 - `Ford Car Price/` — Ford used-car price prediction notebook and trained model (`main.ipynb`, `ford_rf_model.pkl`)
 - `nutrition/` — Nutrition analysis notebooks and datasets
