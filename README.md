@@ -1,128 +1,92 @@
-# Insurance Charges Prediction
+df = pd.read_csv('Data/Data.csv')
+# ML Notebooks — Project Overview
 
-A machine learning project that predicts medical insurance charges using Random Forest regression.
+This repository contains several small machine-learning projects and notebooks used for teaching and experimentation. Each top-level folder contains one or more Jupyter notebooks that demonstrate data exploration, preprocessing, model training, and evaluation.
 
-This project performs end-to-end exploratory data analysis (EDA), data cleaning, feature engineering, and model training on medical insurance data to predict charges based on customer demographics and health factors.
+This README provides a quick map, setup instructions (Linux-focused), and how to run the notebooks.
 
-## Project Overview
+## What's in this repo
 
-The notebook (`Part l/main.ipynb`) includes:
+- `requirements.txt` — project-wide Python dependencies
+- `Data/` — datasets used by the notebooks (CSV files)
+- `Logistic Regresion/`, `Logistic regression/` — logistic regression experiments (notebooks)
+- `Part l/` — Insurance charges prediction notebook and pipeline (`main.ipynb`)
+- `Cal-House/` — California housing prediction (`main.ipynb`, saved model `xgb_best.joblib`)
+- `Ford Car Price/` — Ford used-car price prediction (`main.ipynb`)
+- `Insurance/`, `nutrition/` — additional notebooks and analyses
 
-1. **Exploratory Data Analysis (EDA)**
+Note: Some folder names include spaces; when using them in terminal commands, wrap paths in quotes or escape spaces.
 
-   - Statistical summaries and data shape analysis
-   - Missing values and duplicate detection
-   - Distribution analysis (histograms, boxplots, countplots)
-   - Correlation heatmap
-
-2. **Data Cleaning & Processing**
-
-   - Handling missing/duplicate values
-   - Encoding categorical variables (`sex`, `smoker`) to numerical
-   - One-Hot Encoding for `region` feature
-
-3. **Feature Engineering**
-
-   - BMI categorization (UnderWeight, NormalWeight, Overweight, Obesity)
-   - Feature scaling using StandardScaler
-   - Feature selection using Pearson correlation and Chi-square tests
-
-4. **Model Training & Evaluation**
-   - Train/test split (80/20)
-   - Random Forest Regressor with 200 estimators
-   - Metrics: R² Score, MAE, RMSE
-   - Feature importance visualization
-
-## Repository structure
-
-- `requirements.txt` — Python dependencies for the project
-- `Data/` — dataset folder
-  - `Data.csv` — CSV dataset used by the notebook
-- `Part l/` — contains Jupyter notebook(s)
-  - `main.ipynb` — full ML pipeline: EDA → Data Cleaning → Feature Engineering → Model Training
-- `.venv/` — (optional) virtual environment directory (gitignored)
-
-## Quick setup (Windows PowerShell)
+## Quick setup (Linux / macOS)
 
 1. Create and activate a virtual environment (recommended):
 
-```powershell
-python -m venv .venv
-# Use PowerShell activation
-.\.venv\Scripts\Activate.ps1
-```
-
-If you run into an execution policy error when activating, you can allow the script for the current session:
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
-.\.venv\Scripts\Activate.ps1
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 2. Install dependencies:
 
-```powershell
+```bash
 pip install -r requirements.txt
 ```
 
-3. Start Jupyter and open the notebook:
+3. Launch Jupyter and open the notebook you want to run (example: insurance notebook):
 
-```powershell
-# Start a notebook server and open the main notebook
-jupyter notebook "Part l\main.ipynb"
+```bash
+jupyter notebook "Part l/main.ipynb"
 ```
 
-Or open Jupyter and navigate to the `Part l` folder in the browser.
+Or open `jupyter notebook` and navigate to the folder in your browser.
 
-## How to use the data
+## How to run a specific notebook
 
-The dataset (`Data/Data.csv`) contains medical insurance information with the following features:
+- Open the notebook in Jupyter and run cells sequentially.
+- If a notebook reads `Data/Data.csv`, ensure your working directory is the repository root or adjust the path.
+- If you see a `ModuleNotFoundError`, activate the virtual environment and reinstall `requirements.txt`.
 
-- `age` — age of the customer
-- `sex` — gender (male/female)
-- `bmi` — body mass index
-- `children` — number of children
-- `smoker` — smoking status (yes/no)
-- `region` — geographic region (northwest, northeast, southeast, southwest)
-- `charges` — annual medical charges (target variable)
+## Example: Insurance charges notebook
 
-In the notebook, the dataset is loaded at the beginning:
+- Path: `Part l/main.ipynb`
+- Workflow in the notebook: Load data → EDA → preprocess (encoding + scaling) → train/test split → train model → evaluate.
+- Target column: `charges` (for regression notebooks) or `sex_female` where applicable for classification examples.
 
-```python
-import pandas as pd
-df = pd.read_csv('Data/Data.csv')
-print(df.shape)
-```
+## Notes & tips
 
-If your working directory is different, provide the full path or adjust the relative path accordingly.
-
-## Notes
-
-- The folder name `Part l` contains a space — be careful when passing the path in terminals or scripts; quote the path or escape spaces.
-- This README assumes Windows PowerShell usage. Commands should work on other shells with small adjustments.
+- File paths: quote paths that contain spaces, e.g. `"Part l/main.ipynb"`.
+- Use `source .venv/bin/activate` on Linux/macOS; use the PowerShell activation on Windows.
+- The repository includes examples with RandomForest, XGBoost, and LogisticRegression — check each folder's `README.md` (when present) for model-specific notes.
 
 ## Dependencies
 
-Key dependencies are:
+Key libraries used across notebooks (see `requirements.txt` for exact versions):
 
-- **pandas** — data manipulation
-- **numpy** — numerical computing
-- **scikit-learn** — machine learning (RandomForest, preprocessing, model evaluation)
-- **matplotlib** & **seaborn** — data visualization
-- **scipy** — statistical tests (Pearson correlation, Chi-square)
-- **jupyter** — interactive notebook environment
+- pandas, numpy — data handling
+- scikit-learn — preprocessing, models, evaluation
+- xgboost — boosted-tree models (used in `Cal-House`)
+- matplotlib, seaborn — visualization
+- jupyter — notebook environment
 
-See `requirements.txt` for the complete list. Install all with:
+Install all dependencies with:
 
-## License & contact
+```bash
+pip install -r requirements.txt
+```
 
-This repository does not specify a license. Add a `LICENSE` file if you want to open-source this project.
+## License
 
-Last updated: 2025-11-18
+No license is specified. Add a `LICENSE` file if you intend to publish this repository publicly.
 
-Projects in this repository
+Last updated: 2025-12-10
 
-- `Part l/` — Insurance charges prediction notebook and pipeline
-- `Cal-House/` — California housing price prediction notebook and trained XGBoost model (`main.ipynb`, `xgb_best.joblib`). Open `Cal-House/main.ipynb` to explore EDA, preprocessing, model training, and how to use the saved model.
-- `Ford Car Price/` — Ford used-car price prediction notebook and trained model (`main.ipynb`, `ford_rf_model.pkl`)
-- `nutrition/` — Nutrition analysis notebooks and datasets
+---
+
+If you'd like, I can:
+
+- Make this README shorter or longer depending on the audience (readers vs contributors),
+- Add a per-folder README summary for the main folders, or
+- Create a small script to launch a selected notebook (e.g., `scripts/open_notebook.sh`).
+
+Which would you like next?
+import pandas as pd
