@@ -1,146 +1,79 @@
 # ML Notebooks — Project Overview
 
-This repository contains several machine learning projects and notebooks used for teaching and experimentation. Each top-level folder contains one or more Jupyter notebooks that demonstrate data exploration, preprocessing, model training, and evaluation.
+Hands-on notebooks covering classical machine learning, ensemble methods, unsupervised learning, and basic NLP. Each folder includes one or more Jupyter notebooks that walk through data exploration, preprocessing, model training, and evaluation. Several projects also ship trained artifacts for quick inference demos.
 
-This README provides a quick map, setup instructions, and how to run the notebooks.
+## 📁 Project Map
 
-## 📁 Project Structure
+- `requirements.txt` — shared Python dependencies
+- `Data/` — CSV datasets consumed by many notebooks
+- `Supervised/`
+  - `Cal-House/` — California housing price regression (`main.ipynb`, `xgb_best.joblib`)
+  - `Ford Car Price/` — used-car price regression (`main.ipynb`, `ford_rf_model.pkl`)
+  - `Insurance/` — insurance cost analysis (`Insurance.ipynb`)
+  - `Classification Project/` — heart-disease classifier with `app.py`, encoders, scaler, and `NaivBayes_Heart.pkl`
+  - `nutrition/` — calorie prediction (`Nutieients.ipynb`, `calorie_model.pkl`)
+  - Additional algorithm notebooks: `Decision Trees/`, `KNN/`, `Logistic regression/`, `Naive bayes/`, `Support Vector Machine (SVM)/`, `HyperParameter/`, `Ensamble Learning/`, `Part l/`, `Part ll/`
+- `Unsupervised/`
+  - `K Means Clustring/`, `DB SCAN/`, `PCA/` — clustering and dimensionality reduction notebooks with elbow/cluster plots
+- `NLP/`
+  - `Bag Of Words/` and `Porject/` — text classification experiments using bag-of-words features
+- Root `main.ipynb` — general experimentation notebook
 
-- `requirements.txt` — project-wide Python dependencies
-- `Data/` — datasets used by the notebooks (CSV files)
-
-### Machine Learning Projects
-
-- `Cal-House/` — California housing price prediction (`main.ipynb`, saved model `xgb_best.joblib`)
-- `Ford Car Price/` — Ford used-car price prediction (`main.ipynb`)
-- `Insurance/` — Insurance analysis notebook (`Insurance.ipynb`)
-- `nutrition/` — Nutritional data analysis (`Nutieients.ipynb`)
-
-### Algorithm Implementations
-
-- `Decision Trees/` — Decision tree algorithm implementation (`main.ipynb`)
-- `KNN/` — K-Nearest Neighbors algorithm (`main.ipynb`)
-- `Logistic regression/` — Logistic regression experiments (`main.ipynb`)
-- `Naive bayes/` — Naive Bayes classifier implementation (`main.ipynb`)
-
-### Additional Notebooks
-
-- `Part l/` — Insurance charges prediction notebook and pipeline (`main.ipynb`)
-- `Part ll/` — Additional machine learning notebook (`main.ipynb`)
-- `main.ipynb` — Root-level notebook
-
-**Note:** Some folder names include spaces; when using them in terminal commands, wrap paths in quotes or escape spaces.
+**Tip:** Some paths contain spaces; wrap them in quotes when launching (`jupyter notebook "Supervised/Ford Car Price/main.ipynb"`).
 
 ## 🚀 Quick Setup
 
-### Linux / macOS
-
-1. Create and activate a virtual environment (recommended):
+Linux / macOS:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-```
-
-2. Install dependencies:
-
-```bash
 pip install -r requirements.txt
-```
-
-3. Launch Jupyter and open the notebook you want to run:
-
-```bash
 jupyter notebook
 ```
 
-Or open a specific notebook directly:
-
-```bash
-jupyter notebook "Part l/main.ipynb"
-```
-
-### Windows
-
-1. Create and activate a virtual environment:
+Windows (PowerShell):
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-```
-
-2. Install dependencies:
-
-```powershell
 pip install -r requirements.txt
-```
-
-3. Launch Jupyter:
-
-```powershell
 jupyter notebook
 ```
 
-## 📓 How to Run a Notebook
+## 📓 How to Run
 
-1. Open the notebook in Jupyter Lab or Jupyter Notebook
-2. Run cells sequentially (Cell → Run All, or Shift+Enter for individual cells)
-3. **Important:** If a notebook reads files from `Data/`, ensure your working directory is the repository root, or adjust the paths accordingly
-4. If you encounter a `ModuleNotFoundError`, activate the virtual environment and reinstall dependencies from `requirements.txt`
+1) Activate the virtual environment.  
+2) From the repo root, start Jupyter (`jupyter notebook`).  
+3) Open a notebook and run cells top-to-bottom (Shift+Enter).  
+4) If a notebook reads from `Data/`, keep the working directory at the repo root or update relative paths.  
+5) For inference-ready projects, load the provided `.pkl`/`.joblib` artifacts as shown in their notebooks or companion `README.md` files.
 
-## 📊 Example Workflow
+## 🧭 Typical Workflow
 
-Most notebooks follow a similar workflow:
+Load data → EDA → preprocess (missing values, encoding, scaling) → train/test split → train model → evaluate (appropriate metrics, plots). Ensemble notebooks add cross-validation and hyperparameter tuning.
 
-1. **Load Data** — Import datasets from the `Data/` folder
-2. **Exploratory Data Analysis (EDA)** — Visualize and understand the data
-3. **Preprocessing** — Handle missing values, encoding, scaling, feature engineering
-4. **Train/Test Split** — Split data into training and testing sets
-5. **Model Training** — Train machine learning models
-6. **Evaluation** — Assess model performance using appropriate metrics
+## 💻 Key Dependencies
 
-### Example: Insurance Charges Prediction
+- Data: `pandas`, `numpy`
+- Modeling: `scikit-learn`, `xgboost`
+- Visualization: `matplotlib`, `seaborn`
+- Notebook runtime: `jupyter`, `ipykernel`
+- Apps/serving (select projects): `streamlit`, `fastapi`
 
-- **Path:** `Part l/main.ipynb`
-- **Target:** Predict insurance `charges` (regression)
-- **Workflow:** Load data → EDA → preprocess (encoding + scaling) → train/test split → train model → evaluate
-
-## 💻 Dependencies
-
-Key libraries used across notebooks (see `requirements.txt` for exact versions):
-
-- **Data Handling:** `pandas`, `numpy`
-- **Machine Learning:** `scikit-learn`, `xgboost`
-- **Visualization:** `matplotlib`, `seaborn`
-- **Notebook Environment:** `jupyter`, `ipykernel`
-- **Additional:** `streamlit`, `fastapi` (for some projects)
-
-Install all dependencies with:
-
-```bash
-pip install -r requirements.txt
-```
+Install everything with `pip install -r requirements.txt`.
 
 ## 📝 Notes & Tips
 
-- **File Paths:** Quote paths that contain spaces, e.g., `"Part l/main.ipynb"`
-- **Virtual Environment:** Always activate your virtual environment before running notebooks
-- **Working Directory:** Most notebooks expect to be run from the repository root
-- **Individual READMEs:** Some folders have their own `README.md` files with model-specific notes (e.g., `Cal-House/README.md`, `Ford Car Price/README.md`, `nutrition/README.md`)
-
-## 🔍 Available Models & Algorithms
-
-This repository includes examples and implementations of:
-
-- **Regression Models:** Linear Regression, XGBoost, Random Forest
-- **Classification Models:** Logistic Regression, Naive Bayes, Decision Trees
-- **Supervised Learning:** K-Nearest Neighbors (KNN)
-- **Ensemble Methods:** Random Forest, XGBoost
+- Quote paths with spaces when launching notebooks.  
+- Keep notebooks under the repo root to avoid broken relative paths.  
+- Some subfolders (e.g., `Cal-House/`, `Ford Car Price/`, `nutrition/`) include extra README details and saved models for quick reuse.  
+- Models in `Classification Project/` expect the provided encoders/scalers; load them before inference.
 
 ## 📄 License
 
-No license is specified. Add a `LICENSE` file if you intend to publish this repository publicly.
+No license specified. Add a `LICENSE` file if you plan to publish or distribute.
 
 ---
 
-**Last updated:** January 2025
+**Last updated:** December 2025
