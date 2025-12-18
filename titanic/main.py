@@ -22,11 +22,12 @@ train_df = pd.read_csv("/home/harsh/Desktop/Machine Learning/ML/titanic/train.cs
 test_df = pd.read_csv("/home/harsh/Desktop/Machine Learning/ML/titanic/test.csv")
 
 # --------------------------------------------------
-# Feature Engineering
+# Feature Engineering (LAST-MILE SET)
 # --------------------------------------------------
 def feature_engineering(df):
     df = df.copy()
 
+    # Title
     df["Title"] = df["Name"].str.extract(" ([A-Za-z]+)\.", expand=False)
     df["Title"] = df["Title"].replace(
         ["Lady","Countess","Capt","Col","Don","Dr","Major","Rev","Sir","Jonkheer","Dona"],
@@ -34,15 +35,19 @@ def feature_engineering(df):
     )
     df["Title"] = df["Title"].replace({"Mlle":"Miss","Ms":"Miss","Mme":"Mrs"})
 
+    # Family
     df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
     df["Is_Alone"] = (df["FamilySize"] == 1).astype(int)
 
+    # Fare features
     df["Fare_Per_Person"] = df["Fare"] / df["FamilySize"]
 
+    # Ticket groups
     df["Ticket_Count"] = df.groupby("Ticket")["Ticket"].transform("count")
 
-    # High-signal interaction
+    # Interactions
     df["Age_Class"] = df["Age"] * df["Pclass"]
+    df["Child"] = (df["Age"] < 14).astype(int)
 
     df.drop(columns=["Cabin","Ticket","Name","PassengerId"], inplace=True, errors="ignore")
 
@@ -77,31 +82,31 @@ preprocessor = ColumnTransformer([
 ])
 
 # --------------------------------------------------
-# Base models (strong only)
+# Strong Base Models ONLY
 # --------------------------------------------------
 models = [
-    LogisticRegression(C=1, max_iter=1000, random_state=RANDOM_STATE),
+    LogisticRegression(C=1.0, max_iter=1000, random_state=RANDOM_STATE),
     RandomForestClassifier(
-        n_estimators=400,
-        max_depth=10,
+        n_estimators=450,
+        max_depth=9,
         n_jobs=-1,
         random_state=RANDOM_STATE
     ),
     XGBClassifier(
-        n_estimators=350,
-        learning_rate=0.05,
+        n_estimators=400,
+        learning_rate=0.045,
         max_depth=4,
         subsample=0.9,
         colsample_bytree=0.9,
         eval_metric="logloss",
-        use_label_encoder=False,
         tree_method="hist",
+        use_label_encoder=False,
         random_state=RANDOM_STATE
     )
 ]
 
 # --------------------------------------------------
-# Blending (Out-of-Fold predictions)
+# Blending (OOF)
 # --------------------------------------------------
 skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=RANDOM_STATE)
 
@@ -111,16 +116,16 @@ test_preds = np.zeros((len(test_df), len(models)))
 for i, model in enumerate(models):
     fold_test_preds = np.zeros((len(test_df), N_SPLITS))
 
-    for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
-        X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
-        y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
+    for fold, (tr_idx, val_idx) in enumerate(skf.split(X, y)):
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
 
         pipe = Pipeline([
             ("preprocess", preprocessor),
             ("model", model)
         ])
 
-        pipe.fit(X_train, y_train)
+        pipe.fit(X_tr, y_tr)
 
         oof_preds[val_idx, i] = pipe.predict_proba(X_val)[:, 1]
         fold_test_preds[:, fold] = pipe.predict_proba(test_df)[:, 1]
@@ -128,18 +133,30 @@ for i, model in enumerate(models):
     test_preds[:, i] = fold_test_preds.mean(axis=1)
 
 # --------------------------------------------------
-# Meta-model (simple average works best)
+# Weighted Blend (XGB favored)
 # --------------------------------------------------
-blend_val_preds = oof_preds.mean(axis=1)
-blend_val_labels = (blend_val_preds >= 0.5).astype(int)
-
-blend_acc = accuracy_score(y, blend_val_labels)
-print(f"Blended CV Accuracy: {blend_acc:.4f}")
+weights = np.array([0.28, 0.32, 0.40])  # LR, RF, XGB
+blend_val_probs = np.dot(oof_preds, weights)
 
 # --------------------------------------------------
-# Final test prediction
+# Threshold Search (LAST 0.5%)
 # --------------------------------------------------
-final_test_preds = (test_preds.mean(axis=1) >= 0.5).astype(int)
+best_thresh = 0.5
+best_acc = 0
+
+for t in np.arange(0.45, 0.56, 0.01):
+    acc = accuracy_score(y, (blend_val_probs >= t).astype(int))
+    if acc > best_acc:
+        best_acc = acc
+        best_thresh = t
+
+print(f"Best CV Accuracy: {best_acc:.4f} at threshold {best_thresh:.2f}")
+
+# --------------------------------------------------
+# Final Test Prediction
+# --------------------------------------------------
+blend_test_probs = np.dot(test_preds, weights)
+final_test_preds = (blend_test_probs >= best_thresh).astype(int)
 
 submission = pd.DataFrame({
     "PassengerId": pd.read_csv(
