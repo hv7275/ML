@@ -25,8 +25,8 @@ warnings.filterwarnings('ignore')
 RANDOM_STATE = 42
 N_SPLITS = 15  # Increased for more robust validation
 
-train_path = "train.csv"
-test_path = "test.csv"
+train_path = "titanic/train.csv"
+test_path = "titanic/test.csv"
 
 train_df = pd.read_csv(train_path)
 test_df = pd.read_csv(test_path)
